@@ -78,3 +78,10 @@
     name: suricata
     enabled: true
     state: restarted
+
+- name: Ensure a a cron job to run suricata-update is created
+  ansible.builtin.cron:
+    name: "suricata-update"
+    minute: "0"
+    hour: "2"
+    job: "/usr/bin/suricata-update --no-merge"
