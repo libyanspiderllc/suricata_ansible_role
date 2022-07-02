@@ -24,6 +24,7 @@
     name: suricata
     update_cache: yes
     disable_gpg_check: yes
+    sslverify: no
     state: latest
 
 - name: Copy Suricata configuration file
