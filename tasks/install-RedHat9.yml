@@ -20,5 +20,5 @@
     name: suricata
     update_cache: true
     disable_gpg_check: true
-    sslverify: false
+    validate_certs: false
     state: present
