@@ -1918,7 +1918,7 @@ rule-files:
   - compromised.rules
   - drop.rules
   - dshield.rules
-  - tor.rules
+  # - tor.rules
 
 ##
 ## Auxiliary configuration files.

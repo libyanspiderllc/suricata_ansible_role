@@ -1,0 +1,24 @@
+---
+- name: Enable PowerTools Repository
+  ansible.builtin.yum_repository:
+    name: PowerTools
+    description: PowerTools
+    mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
+    enabled: 1
+
+- name: Download Suricata repository
+  ansible.builtin.get_url:
+    url: https://copr.fedorainfracloud.org/coprs/g/oisf/suricata-6.0/repo/epel-8/group_oisf-suricata-6.0-epel-8.repo
+    dest: /etc/yum.repos.d/suricata-6.0-epel-8.repo
+    validate_certs: false
+    force: false
+    mode: 0644
+
+- name: Install Suricata
+  ansible.builtin.yum:
+    name: suricata
+    update_cache: true
+    disable_gpg_check: true
+    sslverify: false
+    state: present

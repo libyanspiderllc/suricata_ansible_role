@@ -1,0 +1,22 @@
+---
+- name: Add EPEL repository
+  ansible.builtin.yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+- name: Download Suricata repository
+  ansible.builtin.get_url:
+    url: https://copr.fedorainfracloud.org/coprs/g/oisf/suricata-6.0/repo/epel-7/group_oisf-suricata-6.0-epel-7.repo
+    dest: /etc/yum.repos.d/suricata-6.0-epel-7.repo
+    validate_certs: false
+    force: false
+    mode: 0644
+
+- name: Install Suricata
+  ansible.builtin.yum:
+    name: suricata
+    update_cache: true
+    disable_gpg_check: true
+    sslverify: false
+    state: present

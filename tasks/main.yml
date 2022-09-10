@@ -1,88 +1,34 @@
 ---
 # tasks file for suricata-ansible-role
 
-- name: Add EPEL repository
-  ansible.builtin.yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+- name: RedHat 7 | Include install tasks
+  include_tasks: install-RedHat7.yml
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "7"
 
-- name: Download Suricata repository
-  get_url:
-    url: https://copr.fedorainfracloud.org/coprs/jasonish/suricata-6.0/repo/epel-7/jasonish-suricata-6.0-epel-7.repo
-    dest: /etc/yum.repos.d/jasonish-suricata-6.0-epel-7.repo
-    validate_certs: no
-    force: no
+- name: RedHat 8 | Include install tasks
+  include_tasks: install-RedHat8.yml
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "8"
 
-- name: Install Suricate GPG Key
-  ansible.builtin.rpm_key:
-    state: present
-    key: https://download.copr.fedorainfracloud.org/results/jasonish/suricata-6.0/pubkey.gpg
+- name: RedHat 9 | Include install tasks
+  include_tasks: install-RedHat9.yml
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "9"
 
-- name: Install Suricata
-  ansible.builtin.yum:
-    name: suricata
-    update_cache: yes
-    disable_gpg_check: yes
-    sslverify: no
-    state: latest
+- name: RockyLinux 8 | Include install tasks
+  include_tasks: install-RedHat8.yml
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "8"
 
-- name: Copy Suricata configuration file
-  ansible.builtin.copy:
-    src: suricata.yaml
-    dest: /etc/suricata/suricata.yaml
-    backup: yes
-    owner: suricata
-    group: suricata
-    
-- name: Configure server IP address in suricata.yaml HOME_NET
-  ansible.builtin.lineinfile:
-    path: /etc/suricata/suricata.yaml
-    regex: '^\s+HOME_NET:.*$'
-    line: "    HOME_NET: \"[{{ansible_default_ipv4.address}}/32]\""
+- name: RockyLinux 9 | Include install tasks
+  include_tasks: install-RedHat9.yml
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "9"
 
-- name: Configure server interface name in suricata.yaml
-  ansible.builtin.replace:
-    path: /etc/suricata/suricata.yaml
-    regexp: '- interface: eno1'
-    replace: '- interface: {{ansible_default_ipv4.interface}}'
+- name: AlmaLinux 8 | Include install tasks
+  include_tasks: install-RedHat8.yml
+  when: ansible_distribution == "AlmaLinux" and ansible_distribution_major_version == "8"
 
-- name: Copy Suricata sysconfig file
-  ansible.builtin.template:
-    src: sysconfig_suricata.j2
-    dest: /etc/sysconfig/suricata
-    backup: false
-    owner: suricata
-    group: root
-    mode: 0600
+- name: AlmaLinux 9 | Include install tasks
+  include_tasks: install-RedHat9.yml
+  when: ansible_distribution == "AlmaLinux" and ansible_distribution_major_version == "9"
 
-- name: Create necessary directories
-  ansible.builtin.file:
-    path: /var/lib/suricata/rules
-    state: directory
-    owner: root
-    group: suricata
-
-- name: Copy Custom LS Rules file
-  ansible.builtin.copy:
-    src: ls-custom.rules
-    dest: /var/lib/suricata/rules
-    owner: root
-    group: suricata
-
-- name: Update Suricata Rules
-  ansible.builtin.command:
-    cmd: suricata-update --no-merge
-
-- name: Configure and start suricata service
-  ansible.builtin.service:
-    name: suricata
-    enabled: true
-    state: restarted
-
-- name: Ensure a a cron job to run suricata-update is created
-  ansible.builtin.cron:
-    name: "suricata-update"
-    minute: "0"
-    hour: "2"
-    job: "/usr/bin/suricata-update --no-merge"
+- name: Linux | Include customize tasks
+  include_tasks: customize-Linux.yml
+  when: ansible_os_family != "Windows"
