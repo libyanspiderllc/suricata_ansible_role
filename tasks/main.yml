@@ -3,15 +3,15 @@
 
 - name: RedHat 7 | Include install tasks
   include_tasks: install-RedHat7.yml
-  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "7"
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'CloudLinux') and ansible_distribution_major_version == "7"
 
 - name: RedHat 8 | Include install tasks
   include_tasks: install-RedHat8.yml
-  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "8"
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'CloudLinux') and ansible_distribution_major_version == "8"
 
 - name: RedHat 9 | Include install tasks
   include_tasks: install-RedHat9.yml
-  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS') and ansible_distribution_major_version == "9"
+  when: (ansible_distribution == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'CloudLinux') and ansible_distribution_major_version == "9"
 
 - name: RockyLinux 8 | Include install tasks
   include_tasks: install-RedHat8.yml
