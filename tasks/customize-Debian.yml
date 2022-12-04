@@ -1,0 +1,78 @@
+---
+- name: Copy Suricata configuration file
+  ansible.builtin.copy:
+    src: suricata.yaml
+    dest: /etc/suricata/suricata.yaml
+    backup: false
+    owner: root
+    group: root
+    mode: 0640
+  tags: update
+
+- name: Configure server IP address in suricata.yaml HOME_NET
+  ansible.builtin.lineinfile:
+    path: /etc/suricata/suricata.yaml
+    regex: '^\s+HOME_NET:.*$'
+    line: "    HOME_NET: \"[{{ ansible_default_ipv4.address }}/32]\""
+  tags: update
+
+- name: Configure server interface name in suricata.yaml
+  ansible.builtin.replace:
+    path: /etc/suricata/suricata.yaml
+    regexp: '- interface: eno1'
+    replace: '- interface: {{ ansible_default_ipv4.interface }}'
+  tags: update
+
+- name: Copy Suricata Systemd file
+  ansible.builtin.copy:
+    src: suricata.service
+    dest: /etc/systemd/system/suricata.service
+    backup: false
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Create necessary directories
+  ansible.builtin.file:
+    path: /var/lib/suricata/rules
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy Custom LS Rules file
+  ansible.builtin.copy:
+    src: ls-custom.rules
+    dest: /var/lib/suricata/rules
+    owner: root
+    group: root
+    mode: 0644
+  tags: update
+
+- name: Copy custom disabled rules list
+  ansible.builtin.copy:
+    src: disable.conf
+    dest: /etc/suricata/disable.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags: update
+
+- name: Update Suricata Rules
+  ansible.builtin.command:
+    cmd: suricata-update --no-merge
+  tags: update
+
+- name: Configure and start suricata service
+  ansible.builtin.service:
+    name: suricata.service
+    enabled: true
+    state: restarted
+  tags: update
+
+- name: Ensure a a cron job to run suricata-update is created
+  ansible.builtin.cron:
+    name: "suricata-update"
+    minute: "0"
+    hour: "2"
+    job: "/usr/bin/suricata-update --no-merge"

@@ -14,7 +14,11 @@ galaxy_info:
         - "7"
         - "8"
         - "9"
-
+    - name: Debian
+      versions:
+        - "9"
+        - "10"
+        - "11"
 
   galaxy_tags:
     - suricata

@@ -29,6 +29,14 @@
   include_tasks: install-RedHat9.yml
   when: ansible_distribution == "AlmaLinux" and ansible_distribution_major_version == "9"
 
+- name: Debian | Include install tasks
+  include_tasks: install-Debian.yml
+  when: ansible_distribution == "Debian"
+
 - name: Linux | Include customize tasks
   include_tasks: customize-Linux.yml
-  when: ansible_os_family != "Windows"
+  when: ansible_os_family != "Windows" and ansible_distribution != "Debian"
+
+- name: Debian | Include customize tasks
+  include_tasks: customize-Debian.yml
+  when: ansible_distribution == "Debian"

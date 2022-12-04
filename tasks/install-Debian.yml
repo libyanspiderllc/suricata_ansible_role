@@ -1,0 +1,15 @@
+---
+- name: Install libnetfilter-queue-dev
+  ansible.builtin.apt:
+    name: libnetfilter-queue-dev
+    state: present
+
+- name: Add backports repository
+  ansible.builtin.apt_repository:
+    repo: deb http://http.debian.net/debian {{ ansible_distribution_release }}-backports main
+    state: present
+
+- name: Install Suricata
+  ansible.builtin.apt:
+    name: suricata
+    state: present
