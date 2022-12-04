@@ -16,10 +16,8 @@ galaxy_info:
         - "9"
     - name: Debian
       versions:
-        - "9"
-        - "10"
-        - "11"
-
+        - "bullseye"
+        - "buster"
   galaxy_tags:
     - suricata
 
