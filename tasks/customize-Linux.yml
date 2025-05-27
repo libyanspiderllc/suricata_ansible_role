@@ -76,3 +76,10 @@
     minute: "0"
     hour: "2"
     job: "/usr/bin/suricata-update --no-merge"
+
+- name: Ensure a cron job to run logrotate for suricata every hour is created
+  ansible.builtin.cron:
+    name: "logrotate-suricata"
+    minute: "0"
+    hour: "*"
+    job: "/usr/sbin/logrotate /etc/logrotate.d/suricata"
