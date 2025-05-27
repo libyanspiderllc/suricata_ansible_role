@@ -83,3 +83,9 @@
     minute: "0"
     hour: "*"
     job: "/usr/sbin/logrotate /etc/logrotate.d/suricata"
+
+- name: Modifying the log-rotation for Suricata to be rotated by size
+  ansible.builtin.lineinfile:
+    path: /etc/logrotate.d/suricata
+    line: "    maxsize 5G"
+    insertafter: '\{$'
