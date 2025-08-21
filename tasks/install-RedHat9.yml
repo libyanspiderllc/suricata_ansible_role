@@ -9,8 +9,8 @@
 
 - name: Download Suricata repository
   ansible.builtin.get_url:
-    url: https://copr.fedorainfracloud.org/coprs/g/oisf/suricata-6.0/repo/epel-9/group_oisf-suricata-6.0-epel-9.repo
-    dest: /etc/yum.repos.d/suricata-6.0-epel-9.repo
+    url: https://copr.fedorainfracloud.org/coprs/g/oisf/suricata-7.0/repo/epel-9/group_oisf-suricata-7.0-epel-9.repo
+    dest: /etc/yum.repos.d/suricata-7.0-epel-9.repo
     validate_certs: false
     force: false
     mode: 0644
