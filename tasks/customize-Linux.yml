@@ -61,6 +61,10 @@
 - name: Update Suricata Rules
   ansible.builtin.command:
     cmd: suricata-update --no-merge
+  register: suricata_update_result
+  retries: 4
+  delay: 30
+  until: suricata_update_result.rc == 0
   tags: update
 
 - name: Configure and start suricata service
